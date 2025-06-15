@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trench Terminal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Nav -->
+  <div id="navbar-top">
+    <div id="nav-left">
+      <a href="https://example.com" id="close-link">X</a>
+      <span id="copyable" onclick="copyToClipboard()">CA: <span id="copy-text">placeholder</span></span>
+    </div>
+    <div id="nav-title">TRENCH TERMINAL</div>
+  </div>
+
+  <!-- Terminal Container -->
+  <div id="terminal-wrapper">
+    <div id="terminal">
+      <div id="header">
+        <div id="status"><span class="green-dot"></span> LIVE</div>
+        <div id="user-id">User: ...</div>
+      </div>
+
+      <div id="log"></div>
+
+      <div id="input-line">
+        <span>&gt; </span>
+        <input type="text" id="input" autofocus autocomplete="off" />
+        <button id="send-btn">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div id="navbar-bottom">
+    <div id="bottom-text">the degens live terminal</div>
+  </div>
+
+  <script src="client.js"></script>
+  <script>
+    function copyToClipboard() {
+      const text = document.getElementById('copy-text').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = document.getElementById('copy-text').innerText;
+        document.getElementById('copy-text').innerText = 'Copied!';
+        setTimeout(() => {
+          document.getElementById('copy-text').innerText = original;
+        }, 1000);
+      });
+    }
+  </script>
+</body>
+</html>
