@@ -6,7 +6,8 @@ const input = document.getElementById('input');
 const userIdDisplay = document.getElementById('user-id');
 const sendBtn = document.getElementById('send-btn');
 
-// Send existing userId when connecting
+let hasLoadedHistory = false;
+
 socket.addEventListener('open', () => {
   if (userId) {
     socket.send(JSON.stringify({ setUserId: userId }));
@@ -17,7 +18,6 @@ socket.addEventListener('message', (event) => {
   const data = JSON.parse(event.data);
 
   if (data.type === 'id') {
-    // If userId wasn't already stored, set it
     if (!userId) {
       userId = data.id;
       sessionStorage.setItem('userId', userId);
@@ -29,7 +29,20 @@ socket.addEventListener('message', (event) => {
     const msg = document.createElement('div');
     msg.textContent = data.text;
     log.appendChild(msg);
-    log.scrollTop = log.scrollHeight;
+
+    // Scroll to bottom - smooth only on initial history load
+    if (!hasLoadedHistory) {
+      requestAnimationFrame(() => {
+        log.scrollTo({ top: log.scrollHeight, behavior: 'smooth' });
+      });
+    } else {
+      log.scrollTop = log.scrollHeight;
+    }
+  }
+
+  // Once messages start appearing, mark history as loaded
+  if (!hasLoadedHistory) {
+    hasLoadedHistory = true;
   }
 });
 
