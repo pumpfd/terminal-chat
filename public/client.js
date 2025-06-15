@@ -1,5 +1,5 @@
 const socket = new WebSocket(`wss://${location.host}`);
-let userId = null;
+let userId = sessionStorage.getItem('userId') || null;
 
 const log = document.getElementById('log');
 const input = document.getElementById('input');
@@ -9,7 +9,10 @@ const sendBtn = document.getElementById('send-btn');
 socket.addEventListener('message', (event) => {
   const data = JSON.parse(event.data);
   if (data.type === 'id') {
-    userId = data.id;
+    if (!userId) {
+      userId = data.id;
+      sessionStorage.setItem('userId', userId);
+    }
     userIdDisplay.textContent = `User: ${userId}`;
   } else if (data.type === 'message') {
     const msg = document.createElement('div');
