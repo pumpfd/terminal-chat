@@ -1,10 +1,18 @@
-const socket = new WebSocket(`wss://${location.host}`);
+const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+const socket = new WebSocket(`${protocol}://${location.host}`);
+
 let userId = sessionStorage.getItem('userId') || null;
 
 const log = document.getElementById('log');
 const input = document.getElementById('input');
 const userIdDisplay = document.getElementById('user-id');
 const sendBtn = document.getElementById('send-btn');
+
+socket.addEventListener('open', () => {
+  if (userId) {
+    socket.send(JSON.stringify({ setUserId: userId }));
+  }
+});
 
 socket.addEventListener('message', (event) => {
   const data = JSON.parse(event.data);
