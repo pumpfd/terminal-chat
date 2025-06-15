@@ -4,9 +4,8 @@ let userId = sessionStorage.getItem('userId') || null;
 const log = document.getElementById('log');
 const input = document.getElementById('input');
 const userIdDisplay = document.getElementById('user-id');
+const statusText = document.getElementById('status');
 const sendBtn = document.getElementById('send-btn');
-
-let hasLoadedHistory = false;
 
 socket.addEventListener('open', () => {
   if (userId) {
@@ -29,20 +28,11 @@ socket.addEventListener('message', (event) => {
     const msg = document.createElement('div');
     msg.textContent = data.text;
     log.appendChild(msg);
-
-    // Scroll to bottom - smooth only on initial history load
-    if (!hasLoadedHistory) {
-      requestAnimationFrame(() => {
-        log.scrollTo({ top: log.scrollHeight, behavior: 'smooth' });
-      });
-    } else {
-      log.scrollTop = log.scrollHeight;
-    }
+    log.scrollTop = log.scrollHeight;
   }
 
-  // Once messages start appearing, mark history as loaded
-  if (!hasLoadedHistory) {
-    hasLoadedHistory = true;
+  if (data.type === 'user-count') {
+    statusText.innerHTML = `<span class="green-dot"></span> LIVE (${data.count})`;
   }
 });
 
