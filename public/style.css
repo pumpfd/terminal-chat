@@ -88,8 +88,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-top: 60px;   /* Height of top nav */
-    padding-bottom: 60px; /* Height of bottom nav */
+    padding-top: 60px;
+    padding-bottom: 60px;
     box-sizing: border-box;
   }
   
@@ -97,7 +97,7 @@ body {
   #terminal {
     width: 90%;
     max-width: 900px;
-    height: calc(100vh - 120px); /* top + bottom nav height */
+    height: calc(100vh - 120px);
     border: 2px solid #00ff00;
     padding: 10px;
     box-sizing: border-box;
@@ -153,6 +153,12 @@ body {
     gap: 10px;
   }
   
+  #input-line .prompt {
+    color: #00ff00;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
   #input {
     flex-grow: 1;
     background: transparent;
@@ -190,9 +196,13 @@ body {
     }
   
     #input-line {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 5px;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+    }
+  
+    #input-line .prompt {
+      font-size: 16px;
     }
   
     #input {
@@ -202,9 +212,9 @@ body {
     }
   
     #send-btn {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
+      font-size: 14px;
+      padding: 8px;
+      white-space: nowrap;
     }
   
     #nav-title {
