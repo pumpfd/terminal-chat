@@ -97,7 +97,7 @@ body {
   #terminal {
     width: 90%;
     max-width: 900px;
-    height: 100%;
+    height: calc(100vh - 120px); /* top + bottom nav height */
     border: 2px solid #00ff00;
     padding: 10px;
     box-sizing: border-box;
@@ -137,7 +137,7 @@ body {
   
   /* === CHAT LOG === */
   #log {
-    flex-grow: 1;
+    flex: 1;
     overflow-y: auto;
     white-space: pre-wrap;
     padding-right: 5px;
@@ -177,7 +177,8 @@ body {
   #send-btn:hover {
     background-color: #001f00;
   }
-
+  
+  /* === MOBILE RESPONSIVE === */
   @media (max-width: 600px) {
     body {
       font-size: 14px;
@@ -185,7 +186,6 @@ body {
   
     #terminal {
       width: 95%;
-      height: 100%;
       padding: 8px;
     }
   
