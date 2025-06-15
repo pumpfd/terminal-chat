@@ -11,21 +11,18 @@ let clients = [];
 let chatHistory = [];
 
 wss.on('connection', (ws) => {
-  let userId = null;
+  let userId = 'User-' + Math.floor(Math.random() * 10000);
 
-  // Wait for messages from this client
   ws.on('message', (raw) => {
     let msg;
-
     try {
       msg = JSON.parse(raw);
     } catch (e) {
-      // Not JSON — treat as plain chat message
+      // Not JSON — treat as normal message
       if (userId) {
         const fullMessage = `${userId}: ${raw}`;
         chatHistory.push(fullMessage);
 
-        // Broadcast to all clients
         clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN) {
             client.send(JSON.stringify({ type: 'message', text: fullMessage }));
@@ -35,16 +32,15 @@ wss.on('connection', (ws) => {
       return;
     }
 
-    // Handle special message: setUserId
+    // Handle session reuse
     if (msg.setUserId) {
       userId = msg.setUserId;
       ws.userId = userId;
-      console.log(`${userId} connected.`);
+      console.log(`${userId} connected (existing session)`);
 
-      // Confirm back to client
       ws.send(JSON.stringify({ type: 'id', id: userId }));
 
-      // Send chat history to this new connection
+      // Send chat history
       chatHistory.forEach(historyMsg => {
         ws.send(JSON.stringify({ type: 'message', text: historyMsg }));
       });
@@ -53,11 +49,13 @@ wss.on('connection', (ws) => {
     }
   });
 
+  ws.send(JSON.stringify({ type: 'id', id: userId }));
+
   clients.push(ws);
 
   ws.on('close', () => {
     clients = clients.filter(c => c !== ws);
-    console.log(`${ws.userId || 'Unknown user'} disconnected.`);
+    console.log(`${userId} disconnected`);
   });
 });
 
