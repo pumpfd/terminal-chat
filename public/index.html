@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Trench Terminal</title>
+  <title>war chat</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Top Nav -->
   <div id="navbar-top">
     <div id="nav-left">
-      <a href="https://x.com/i/communities/1934320843074720036" id="close-link">X</a>
+      <a href="https://example.com" id="close-link">X</a>
     </div>
-    <div id="nav-title">TRENCH TERMINAL</div>
+    <div id="nav-title">WAR CHAT</div>
+  </div>
+
+  <!-- Banner Bar -->
+  <div id="banner-bar" class="hidden">
+    <span id="banner-message">This is a banner message.</span>
+    <span id="banner-close" onclick="closeBanner()">×</span>
   </div>
 
   <!-- Terminal Container -->
@@ -39,7 +41,7 @@
 
   <!-- Bottom Nav -->
   <div id="navbar-bottom">
-    <span id="copyable" onclick="copyToClipboard()">CA: <span id="copy-text">XYZ</span></span>
+    <span id="copyable" onclick="copyToClipboard()">CA: <span id="copy-text">placeholder</span></span>
   </div>
 
   <script src="client.js"></script>
@@ -53,6 +55,19 @@
           document.getElementById('copy-text').innerText = original;
         }, 1000);
       });
+    }
+
+    function showBanner(message) {
+      const banner = document.getElementById('banner-bar');
+      const bannerText = document.getElementById('banner-message');
+      bannerText.textContent = message;
+      banner.classList.remove('hidden');
+      document.body.classList.add('banner-visible');
+    }
+
+    function closeBanner() {
+      document.getElementById('banner-bar').classList.add('hidden');
+      document.body.classList.remove('banner-visible');
     }
   </script>
 </body>
