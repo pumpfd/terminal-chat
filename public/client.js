@@ -34,6 +34,10 @@ socket.addEventListener('message', (event) => {
   if (data.type === 'user-count') {
     statusText.innerHTML = `<span class="green-dot"></span> LIVE (${data.count})`;
   }
+
+  if (data.type === 'banner') {
+    showBanner(data.message);
+  }
 });
 
 function sendMessage() {
@@ -50,3 +54,17 @@ input.addEventListener('keydown', (e) => {
 });
 
 sendBtn.addEventListener('click', sendMessage);
+
+// Banner controls from global scope
+function showBanner(message) {
+  const banner = document.getElementById('banner-bar');
+  const bannerText = document.getElementById('banner-message');
+  bannerText.textContent = message;
+  banner.classList.remove('hidden');
+  document.body.classList.add('banner-visible');
+}
+
+function closeBanner() {
+  document.getElementById('banner-bar').classList.add('hidden');
+  document.body.classList.remove('banner-visible');
+}
