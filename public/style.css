@@ -225,3 +225,40 @@ body {
       font-size: 12px;
     }
   }
+
+  /* === BANNER BAR === */
+#banner-bar {
+  background-color: #111;
+  color: #00ff00;
+  padding: 10px 15px;
+  font-family: monospace;
+  font-size: 14px;
+  border-bottom: 1px solid #00ff00;
+  position: fixed;
+  top: 40px; /* below navbar-top */
+  left: 0;
+  width: 100%;
+  z-index: 998;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#banner-bar.hidden {
+  display: none;
+}
+
+#banner-close {
+  cursor: pointer;
+  font-weight: bold;
+  padding-left: 20px;
+}
+
+#banner-close:hover {
+  color: #00cc00;
+}
+
+/* Adjust terminal-wrapper when banner is visible */
+body.banner-visible #terminal-wrapper {
+  padding-top: 90px; /* 60 + 30 for banner */
+}
