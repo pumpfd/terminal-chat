@@ -1,11 +1,13 @@
 const socket = new WebSocket(`wss://${location.host}`);
 let userId = sessionStorage.getItem('userId') || null;
+let lastFartTime = 0;
 
-const log = document.getElementById('log');
-const input = document.getElementById('input');
-const userIdDisplay = document.getElementById('user-id');
 const statusText = document.getElementById('status');
-const sendBtn = document.getElementById('send-btn');
+const fartCounter = document.getElementById('fart-counter');
+const fartButton = document.getElementById('fart-button');
+
+// Load fart sound
+const fartSound = new Audio('fart.mp3');
 
 socket.addEventListener('open', () => {
   if (userId) {
@@ -21,50 +23,25 @@ socket.addEventListener('message', (event) => {
       userId = data.id;
       sessionStorage.setItem('userId', userId);
     }
-    userIdDisplay.textContent = `User: ${userId}`;
-  }
-
-  if (data.type === 'message') {
-    const msg = document.createElement('div');
-    msg.textContent = data.text;
-    log.appendChild(msg);
-    log.scrollTop = log.scrollHeight;
   }
 
   if (data.type === 'user-count') {
-    statusText.innerHTML = `<span class="green-dot"></span> LIVE (${data.count})`;
+    statusText.innerHTML = `<span class="green-dot"></span> Farters: ${data.count}`;
   }
 
-  if (data.type === 'banner') {
-    showBanner(data.message);
-  }
-});
-
-function sendMessage() {
-  if (input.value.trim() !== '') {
-    socket.send(input.value.trim());
-    input.value = '';
-  }
-}
-
-input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    sendMessage();
+  if (data.type === 'fart-count') {
+    fartCounter.textContent = `Farts: ${data.count}`;
   }
 });
 
-sendBtn.addEventListener('click', sendMessage);
-
-// Banner controls from global scope
-function showBanner(message) {
-  const banner = document.getElementById('banner-bar');
-  const bannerText = document.getElementById('banner-message');
-  bannerText.textContent = message;
-  banner.classList.remove('hidden');
-  document.body.classList.add('banner-visible');
-}
-
-function closeBanner() {
-  document.getElementById('banner-bar').classList.add('hidden');
-  document.body.classList.remove('banner-visible');
-}
+fartButton.addEventListener('click', () => {
+  const now = Date.now();
+  if (now - lastFartTime >= 5000) {
+    socket.send(JSON.stringify({ type: 'fart', userId }));
+    lastFartTime = now;
+    fartSound.currentTime = 0;
+    fartSound.play();
+  } else {
+    console.log('⏱️ Please wait before farting again...');
+  }
+});
