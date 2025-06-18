@@ -1,47 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>war chat</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>FartFi - Fart Finance</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Top Nav -->
+  <!-- Top Bar -->
   <div id="navbar-top">
-    <div id="nav-left">
-      <a href="https://x.com/i/communities/1934782046091583659" id="close-link">X</a>
+    <div id="nav-title">FARTFI</div>
+    <div id="status-bar">
+      <span id="status"><span class="green-dot"></span> Farters: 0</span>
+      <span id="fart-counter">Farts: 0</span>
     </div>
-    <div id="nav-title">WAR CHAT</div>
   </div>
 
-  <!-- Banner Bar -->
-  <div id="banner-bar" class="hidden">
-    <span id="banner-message">This is a banner message.</span>
-    <span id="banner-close" onclick="closeBanner()">×</span>
-  </div>
-
-  <!-- Terminal Container -->
-  <div id="terminal-wrapper">
-    <div id="terminal">
-      <div id="header">
-        <div id="status"><span class="green-dot"></span> LIVE (0)</div>
-        <div id="user-id">Degen: ...</div>
-      </div>
-
-      <div id="log"></div>
-
-      <div id="input-line">
-        <span class="prompt">&gt;</span>
-        <input type="text" id="input" autofocus autocomplete="off" />
-        <button id="send-btn" type="button">Send</button>
-      </div>
-    </div>
+  <!-- Main Fart Button -->
+  <div id="fart-container">
+    <img id="fart-button" src="1fart.png" alt="Fart Button" />
   </div>
 
   <!-- Bottom Nav -->
   <div id="navbar-bottom">
-    <span id="copyable" onclick="copyToClipboard()">CA: <span id="copy-text">GCkJ1VjtBemFZ1NyTUWJdSWXAmtJWaxoxNevu2Frpump</span></span>
+    <span id="copyable" onclick="copyToClipboard()">CA: <span id="copy-text">placeholder</span></span>
   </div>
 
   <script src="client.js"></script>
@@ -49,25 +31,12 @@
     function copyToClipboard() {
       const text = document.getElementById('copy-text').innerText;
       navigator.clipboard.writeText(text).then(() => {
-        const original = document.getElementById('copy-text').innerText;
+        const original = text;
         document.getElementById('copy-text').innerText = 'Copied!';
         setTimeout(() => {
           document.getElementById('copy-text').innerText = original;
         }, 1000);
       });
-    }
-
-    function showBanner(message) {
-      const banner = document.getElementById('banner-bar');
-      const bannerText = document.getElementById('banner-message');
-      bannerText.textContent = message;
-      banner.classList.remove('hidden');
-      document.body.classList.add('banner-visible');
-    }
-
-    function closeBanner() {
-      document.getElementById('banner-bar').classList.add('hidden');
-      document.body.classList.remove('banner-visible');
     }
   </script>
 </body>
