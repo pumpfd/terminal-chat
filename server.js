@@ -8,7 +8,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 let clients = [];
-let chatHistory = [];
+let fartCount = 0;
 
 function broadcast(data) {
   clients.forEach(client => {
@@ -23,23 +23,14 @@ wss.on('connection', (ws) => {
 
   clients.push(ws);
   broadcast({ type: 'user-count', count: clients.length });
-
   ws.send(JSON.stringify({ type: 'id', id: userId }));
-  chatHistory.forEach(historyMsg => {
-    ws.send(JSON.stringify({ type: 'message', text: historyMsg }));
-  });
+  ws.send(JSON.stringify({ type: 'fart-count', count: fartCount }));
 
   ws.on('message', (raw) => {
     let msg;
     try {
       msg = JSON.parse(raw);
-    } catch (e) {
-      if (userId) {
-        const fullMessage = `${userId}: ${raw}`;
-        chatHistory.push(fullMessage);
-        if (chatHistory.length > 500) chatHistory.shift(); // Limit to 500
-        broadcast({ type: 'message', text: fullMessage });
-      }
+    } catch {
       return;
     }
 
@@ -47,6 +38,11 @@ wss.on('connection', (ws) => {
       userId = msg.setUserId;
       ws.userId = userId;
       ws.send(JSON.stringify({ type: 'id', id: userId }));
+    }
+
+    if (msg.type === 'fart') {
+      fartCount++;
+      broadcast({ type: 'fart-count', count: fartCount });
     }
   });
 
@@ -64,5 +60,5 @@ wss.on('connection', (ws) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 server.listen(3000, () => {
-  console.log('✅ Terminal chat running at http://localhost:3000');
+  console.log('🚀 FartFi running at http://localhost:3000');
 });
