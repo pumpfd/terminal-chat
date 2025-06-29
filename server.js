@@ -9,7 +9,7 @@ const wss = new WebSocket.Server({ server });
 
 let clients = [];
 let totalValue = 0;
-const VALUE_PER_CLICK = 69;
+const VALUE_PER_CLICK = 690;
 
 function broadcast(data) {
   clients.forEach(client => {
