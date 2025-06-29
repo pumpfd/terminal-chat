@@ -1,13 +1,16 @@
 const socket = new WebSocket(`wss://${location.host}`);
 let userId = sessionStorage.getItem('userId') || null;
-let lastFartTime = 0;
+let lastClickTime = 0;
+let totalValue = 0;
 
 const statusText = document.getElementById('status');
-const fartCounter = document.getElementById('fart-counter');
-const fartButton = document.getElementById('fart-button');
+const valueCounter = document.getElementById('value-counter');
+const coinButton = document.getElementById('fart-button');
+// Load ka-ching sound
+const kaChingSound = new Audio('kaching.mp3');
 
-// Load fart sound
-const fartSound = new Audio('fart.mp3');
+// Each click adds $69
+const VALUE_PER_CLICK = 690;
 
 socket.addEventListener('open', () => {
   if (userId) {
@@ -26,22 +29,25 @@ socket.addEventListener('message', (event) => {
   }
 
   if (data.type === 'user-count') {
-    statusText.innerHTML = `<span class="green-dot"></span> Farters: ${data.count}`;
+    statusText.innerHTML = `<span class="green-dot"></span> ${data.count}`;
   }
 
-  if (data.type === 'fart-count') {
-    fartCounter.textContent = `Farts: ${data.count}`;
+  if (data.type === 'value-update') {
+    totalValue = data.value;
+    valueCounter.textContent = `$${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
   }
 });
 
-fartButton.addEventListener('click', () => {
+coinButton.addEventListener('click', () => {
   const now = Date.now();
-  if (now - lastFartTime >= 5000) {
-    socket.send(JSON.stringify({ type: 'fart', userId }));
-    lastFartTime = now;
-    fartSound.currentTime = 0;
-    fartSound.play();
+  if (now - lastClickTime >= 1000) {
+    socket.send(JSON.stringify({ type: 'add-value', userId }));
+    lastClickTime = now;
+
+    // Play the ka-ching sound
+    kaChingSound.currentTime = 0; // rewind if it's still playing
+    kaChingSound.play();
   } else {
-    console.log('⏱️ Please wait before farting again...');
+    console.log('⏱️ Slow down, click too fast!');
   }
 });
