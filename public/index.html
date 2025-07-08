@@ -1,40 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>true value coin | $VALUE</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bonk Chat | $CHAT</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Top Banner -->
+  <!-- Top Nav -->
   <div id="navbar-top">
-    <a href="https://x.com/i/communities/1939354377413603400/" id="exit-button" title="Exit">✕</a>
-    <div id="nav-title">true value coin | $VALUE</div>
+    <div id="nav-left">
+      <a href="https://x.com/i/communities/1942692864422731909/" id="close-link">X</a>
+    </div>
+    <div id="nav-title">BONK CHAT</div>
   </div>
 
-  <!-- Stats Section -->
-  <div id="stats-container">
-    <div class="stat-box">
-      <div class="stat-label">Live Valuers</div>
-      <div class="stat-value" id="status"><span class="green-dot"></span> 0</div>
-    
-    </div>
-    <div class="stat-box">
-      <div class="stat-label">True Value</div>
-      <div class="stat-value" id="value-counter">$0.00</div>
-      <div class="stat-subtext">press the coin</div>
-    </div>
-  </div>
+  <!-- Terminal Container -->
+  <div id="terminal-wrapper">
+    <div id="terminal">
+      <div id="header">
+        <div id="status"><span class="green-dot"></span> <span id="live-count">LIVE</span></div>
+        <div id="user-id">User: ...</div>
+      </div>
 
-  <!-- Main Coin Button -->
-  <div id="fart-container">
-    <img id="fart-button" src="coin.png" alt="Coin Button" />
+      <div id="log"></div>
+
+      <div id="input-line">
+        <span class="prompt">&gt;</span>
+        <input type="text" id="input" autofocus autocomplete="off" />
+        <button id="send-btn" type="button">Send</button>
+      </div>
+    </div>
   </div>
 
   <!-- Bottom Nav -->
   <div id="navbar-bottom">
-    <span id="copyable" onclick="copyToClipboard()">CA: <span id="copy-text">placeholder</span></span>
+    <div id="bottom-text">3rBL6LRY8bVk9yv39V7k1SJqJoutQJPZ5UUYw4Kmbonk</div>
   </div>
 
   <script src="client.js"></script>
