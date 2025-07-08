@@ -1,23 +1,22 @@
 const socket = new WebSocket(`wss://${location.host}`);
 let userId = sessionStorage.getItem('userId') || null;
-let lastClickTime = 0;
-let totalValue = 0;
 
-const statusText = document.getElementById('status');
-const valueCounter = document.getElementById('value-counter');
-const coinButton = document.getElementById('fart-button');
-// Load ka-ching sound
-const kaChingSound = new Audio('kaching.mp3');
+const log = document.getElementById('log');
+const input = document.getElementById('input');
+const userIdDisplay = document.getElementById('user-id');
+const sendBtn = document.getElementById('send-btn');
 
-// Each click adds $69
-const VALUE_PER_CLICK = 690;
+let cooldown = false;
+const cooldownTime = 4; // in seconds
 
+// When connected, send existing user ID if we have one
 socket.addEventListener('open', () => {
   if (userId) {
     socket.send(JSON.stringify({ setUserId: userId }));
   }
 });
 
+// When receiving messages
 socket.addEventListener('message', (event) => {
   const data = JSON.parse(event.data);
 
@@ -26,28 +25,51 @@ socket.addEventListener('message', (event) => {
       userId = data.id;
       sessionStorage.setItem('userId', userId);
     }
+    userIdDisplay.textContent = `User: ${userId}`;
   }
 
-  if (data.type === 'user-count') {
-    statusText.innerHTML = `<span class="green-dot"></span> ${data.count}`;
+  if (data.type === 'message') {
+    const msg = document.createElement('div');
+    msg.textContent = data.text;
+    log.appendChild(msg);
+    log.scrollTop = log.scrollHeight;
   }
 
-  if (data.type === 'value-update') {
-    totalValue = data.value;
-    valueCounter.textContent = `$${totalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-  }
-});
-
-coinButton.addEventListener('click', () => {
-  const now = Date.now();
-  if (now - lastClickTime >= 1000) {
-    socket.send(JSON.stringify({ type: 'add-value', userId }));
-    lastClickTime = now;
-
-    // Play the ka-ching sound
-    kaChingSound.currentTime = 0; // rewind if it's still playing
-    kaChingSound.play();
-  } else {
-    console.log('⏱️ Slow down, click too fast!');
+  if (data.type === 'count') {
+    const status = document.getElementById('status');
+    status.innerHTML = `<span class="green-dot"></span> LIVE (${data.count})`;
   }
 });
+
+// Send message with cooldown
+function sendMessage() {
+  if (cooldown || input.value.trim() === '') return;
+
+  socket.send(input.value.trim());
+  input.value = '';
+
+  cooldown = true;
+  sendBtn.disabled = true;
+  let timeLeft = cooldownTime;
+
+  const originalText = sendBtn.textContent;
+  sendBtn.textContent = `${timeLeft}s`;
+
+  const countdown = setInterval(() => {
+    timeLeft--;
+    sendBtn.textContent = `${timeLeft}s`;
+
+    if (timeLeft <= 0) {
+      clearInterval(countdown);
+      cooldown = false;
+      sendBtn.disabled = false;
+      sendBtn.textContent = originalText;
+    }
+  }, 1000);
+}
+
+// Event listeners
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') sendMessage();
+});
+sendBtn.addEventListener('click', sendMessage);
